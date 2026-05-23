@@ -87,6 +87,12 @@ services:
     command: webserver
     ports:
       - "8080:8080"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./elt:/opt/airflow/elt
+      - ./service_metrics_dbt:/opt/dbt
+      - ~/.dbt:/root/.dbt
+      - /var/run/docker.sock:/var/run/docker.sock
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 10s
@@ -97,6 +103,12 @@ services:
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./elt:/opt/airflow/elt
+      - ./service_metrics_dbt:/opt/dbt
+      - ~/.dbt:/root/.dbt
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
     env_file:
       - .env.airflow
