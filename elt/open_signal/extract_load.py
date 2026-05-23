@@ -7,13 +7,13 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 
-XLSX_PATH   = os.getenv("XLSX_PATH", "/data/NL_Open_Signal_Stats.xlsx")
-PG_HOST     = os.getenv("PG_HOST", "localhost")
+DATA_PATH   = os.getenv("DATA_PATH", "/data")
+PG_HOST     = os.getenv("PG_HOST", "host.docker.internal")
 PG_PORT     = os.getenv("PG_PORT", "5432")
-PG_DB       = os.getenv("PG_DB", "signal_db")
-PG_USER     = os.getenv("PG_USER", "postgres")
-PG_PASSWORD = os.getenv("PG_PASSWORD", "postgres")
-PG_SCHEMA   = os.getenv("PG_SCHEMA", "raw")
+PG_DB       = os.getenv("PG_DB", "service_metrics_db")
+PG_USER     = os.getenv("PG_USER")
+PG_PASSWORD = os.getenv("PG_PASSWORD")
+PG_SCHEMA   = os.getenv("PG_SCHEMA", "public")
 
 COLUMN_MAP = {
     "Aggregation":                   "aggregation",
@@ -46,7 +46,7 @@ COLUMN_MAP = {
 
 
 def extract() -> pd.DataFrame:
-    df = pd.read_excel(XLSX_PATH)
+    df = pd.read_excel(DATA_PATH)
     df.rename(columns=COLUMN_MAP, inplace=True)
     df["report_end_date"] = pd.to_datetime(df["report_end_date"]).dt.date
     return df

@@ -30,15 +30,24 @@ services:
       - elt_network
     env_file:
       - .env.postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
   extract_load_open_signal:
     build:
       context: ./elt/open_signal
       dockerfile: Dockerfile
-    command: ["python", "open_signal/extract_load.py"]
+    command: ["python", "extract_load.py"]
+    volumes:
+      - ./data:/data
+    env_file:
+      - .env.pg
     networks:
       - elt_network
     depends_on:
-      - metrics_postgres
+      metrics_postgres:
+        condition: service_healthy
   dbt:
     image: ghcr.io/dbt-labs/dbt-postgres:1.4.7
     command: ["run", "--profiles-dir", "/root", "--project-dir", "/dbt"]

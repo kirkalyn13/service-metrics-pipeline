@@ -125,3 +125,4 @@ Thumbs.db
 tmp/
 temp/
 .cache/
+data/*
