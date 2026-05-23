@@ -1,0 +1,127 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Mypy / Ruff / Lint
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# =========================
+# Airflow
+# =========================
+airflow/logs/
+airflow/airflow.db
+airflow/webserver_config.py
+airflow/standalone_admin_password.txt
+
+# Airflow Generated Files
+airflow/*.pid
+airflow/*.log
+
+# =========================
+# Streamlit
+# =========================
+.streamlit/secrets.toml
+
+# =========================
+# PostgreSQL / Database
+# =========================
+postgres-data/
+*.db
+*.sqlite3
+
+# =========================
+# Data Files
+# =========================
+
+# Raw datasets
+data/raw/*
+!data/raw/.gitkeep
+
+# Processed datasets
+data/processed/*
+!data/processed/.gitkeep
+
+# Generated exports/reports
+reports/
+exports/
+
+# Large files
+*.parquet
+*.feather
+*.h5
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+
+# Ignore local Docker volumes
+volumes/
+
+# =========================
+# IDE / Editor
+# =========================
+
+# VSCode
+.vscode/
+
+# IntelliJ
+.idea/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# =========================
+# Terraform (optional future)
+# =========================
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# =========================
+# Misc
+# =========================
+tmp/
+temp/
+.cache/
