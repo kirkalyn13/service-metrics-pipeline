@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: raw_open_signal_4g
+    schema: public
+    description: "Raw signal stats loaded from open signal xlsx file"
+    tables:
+      - name: raw_open_signal_4g
+        description: "Raw 4G network signal statistics"
+        columns:
+          - name: report_end_date
+            tests: [not_null]
+          - name: network_name
+            tests: [not_null]
+          - name: technology
+            tests:
+              - accepted_values:
+                  values: ["4G"]

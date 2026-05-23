@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: open_signal_4g
+    description: "Staged 4G signal data — cleaned nulls, trimmed strings"
+    columns:
+      - name: report_end_date
+        tests: [not_null]
+      - name: network_name
+        tests: [not_null]
+      - name: download_mean
+        tests: [not_null]
+  - name: open_signal_performance
+    description: "Aggregated network performance by date, operator, technology, and location"
+    columns:
+      - name: report_end_date
+        tests: [not_null]
+      - name: network_name
+        tests: [not_null]
+      - name: technology_band
+        tests:
+          - accepted_values:
+              values: ["3G", "4G"]
+      - name: avg_download_mbps
+        tests: [not_null]

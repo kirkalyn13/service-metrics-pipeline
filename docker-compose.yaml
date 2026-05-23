@@ -54,7 +54,7 @@ services:
     networks:
       - elt_network
     volumes:
-      - ./custom_postgres:/dbt
+      - ./service_metrics_dbt:/dbt
       - ~/.dbt:/root
     depends_on:
       extract_load_open_signal:

@@ -76,7 +76,7 @@ def run():
 
     for tech in technologies:
         tech_key = tech.lower().replace(" ", "_")   # e.g. "4g", "3g"
-        table    = f"signal_stats_{tech_key}"
+        table    = f"raw_open_signal_{tech_key}"
         subset   = df[df["technology"] == tech]
         print(f"Loading {tech} data…")
         load_to_postgres(subset, table, engine)
