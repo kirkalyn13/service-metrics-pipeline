@@ -30,16 +30,15 @@ services:
       - elt_network
     env_file:
       - .env.postgres
-  elt_script:
+  extract_load_open_signal:
     build:
       context: ./elt
       dockerfile: Dockerfile
-    command: ["python", "elt_script.py"]
+    command: ["python", "extract_load.py"]
     networks:
       - elt_network
     depends_on:
-      - source_postgres
-      - destination_postgres
+      - service_metrics_postgres
   dbt:
     image: ghcr.io/dbt-labs/dbt-postgres:1.4.7
     command: ["run", "--profiles-dir", "/root", "--project-dir", "/dbt"]
@@ -49,7 +48,7 @@ services:
       - ./custom_postgres:/dbt
       - ~/.dbt:/root
     depends_on:
-      elt_script:
+      extract_load_open_signal:
         condition: service_completed_successfully 
     env_file:
       - .env.dbt
@@ -91,7 +90,7 @@ services:
     command: scheduler
     restart: unless-stopped
     env_file:
-      - .env
+      - .env.airflow
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -100,4 +99,4 @@ networks:
     driver: bridge
 
 volumes:
-  destination_db_data:
+  postgres-db-volume:
