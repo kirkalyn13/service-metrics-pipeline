@@ -22,7 +22,7 @@ x-airflow-common: &airflow-common
     - "host.docker.internal:host-gateway"
 
 services:
-  service_metrics_postgres:
+  metrics_postgres:
     image: postgres:15
     ports:
       - "5435:5432"
@@ -32,13 +32,13 @@ services:
       - .env.postgres
   extract_load_open_signal:
     build:
-      context: ./elt
+      context: ./elt/open_signal
       dockerfile: Dockerfile
-    command: ["python", "extract_load.py"]
+    command: ["python", "open_signal/extract_load.py"]
     networks:
       - elt_network
     depends_on:
-      - service_metrics_postgres
+      - metrics_postgres
   dbt:
     image: ghcr.io/dbt-labs/dbt-postgres:1.4.7
     command: ["run", "--profiles-dir", "/root", "--project-dir", "/dbt"]

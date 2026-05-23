@@ -6,10 +6,6 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY start.sh /app/start.sh
-
 COPY extract_load.py .
-
-RUN echo "0 3 * * * python /app/extract_load.py" | crontab
 
 CMD ["python", "extract_load.py"]
