@@ -1,11 +1,12 @@
 """
 ELT Script: Open Signal Stats — XLSX -> PostgreSQL
 Splits data by Technology (3G / 4G) into separate tables.
+Raw tables are partitioned by year on report_end_date.
 """
 
 import os
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 
 DATA_PATH   = os.getenv("DATA_PATH", "/data")
 PG_HOST     = os.getenv("PG_HOST", "host.docker.internal")
@@ -44,6 +45,43 @@ COLUMN_MAP = {
     "Voiceappexperience Readings":   "voiceappexperience_readings",
 }
 
+TABLE_DDL = """
+    CREATE TABLE IF NOT EXISTS {schema}.{table} (
+        aggregation                  INTEGER,
+        report_end_date              DATE NOT NULL,
+        network_name                 TEXT,
+        technology                   TEXT,
+        location_category            TEXT,
+        area                         TEXT,
+        location                     TEXT,
+        availability_devices         DOUBLE PRECISION,
+        availability_mean            DOUBLE PRECISION,
+        availability_readings        DOUBLE PRECISION,
+        download_devices             DOUBLE PRECISION,
+        download_mean                DOUBLE PRECISION,
+        download_readings            DOUBLE PRECISION,
+        latency_devices              DOUBLE PRECISION,
+        latency_mean                 DOUBLE PRECISION,
+        latency_readings             DOUBLE PRECISION,
+        number_of_records            INTEGER,
+        upload_devices               DOUBLE PRECISION,
+        upload_mean                  DOUBLE PRECISION,
+        upload_readings              DOUBLE PRECISION,
+        videoexperience_devices      DOUBLE PRECISION,
+        videoexperience_mean         DOUBLE PRECISION,
+        videoexperience_readings     DOUBLE PRECISION,
+        voiceappexperience_devices   DOUBLE PRECISION,
+        voiceappexperience_mean      DOUBLE PRECISION,
+        voiceappexperience_readings  DOUBLE PRECISION
+    ) PARTITION BY RANGE (report_end_date);
+"""
+
+PARTITION_DDL = """
+    CREATE TABLE IF NOT EXISTS {schema}.{table}_y{year}
+    PARTITION OF {schema}.{table}
+    FOR VALUES FROM ('{year}-01-01') TO ('{next_year}-01-01');
+"""
+
 
 def extract() -> pd.DataFrame:
     df = pd.read_excel(DATA_PATH)
@@ -52,12 +90,28 @@ def extract() -> pd.DataFrame:
     return df
 
 
+def ensure_partitioned_table(engine, table: str, years: list) -> None:
+    with engine.begin() as conn:
+        # Create parent partitioned table
+        conn.execute(text(TABLE_DDL.format(schema=PG_SCHEMA, table=table)))
+
+        # Create a partition for each year found in the data
+        for year in years:
+            conn.execute(text(PARTITION_DDL.format(
+                schema=PG_SCHEMA,
+                table=table,
+                year=year,
+                next_year=year + 1,
+            )))
+    print(f"  Partitions ensured for years: {years} -> {PG_SCHEMA}.{table}")
+
+
 def load_to_postgres(df: pd.DataFrame, table: str, engine) -> None:
     df.to_sql(
         name=table,
         con=engine,
         schema=PG_SCHEMA,
-        if_exists="replace",
+        if_exists="append",
         index=False,
     )
     print(f"  Loaded {len(df)} rows -> {PG_SCHEMA}.{table}")
@@ -75,9 +129,14 @@ def run():
     print(f"Technologies found: {list(technologies)}")
 
     for tech in technologies:
-        tech_key = tech.lower().replace(" ", "_")   # e.g. "4g", "3g"
+        tech_key = tech.lower().replace(" ", "_")
         table    = f"raw_open_signal_{tech_key}"
-        subset   = df[df["technology"] == tech]
+        subset   = df[df["technology"] == tech].reset_index(drop=True)
+        years    = sorted(subset["report_end_date"].apply(lambda d: d.year).unique().tolist())
+
+        print(f"Ensuring partitioned table for {tech}…")
+        ensure_partitioned_table(engine, table, years)
+
         print(f"Loading {tech} data…")
         load_to_postgres(subset, table, engine)
 
