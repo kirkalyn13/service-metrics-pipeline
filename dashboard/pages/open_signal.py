@@ -3,6 +3,7 @@ import streamlit as st
 import plotly.express as px
 from datetime import date, timedelta
 from db import get_engine, PG_SCHEMA
+from utils.open_signal import generate_notes
 
 # Config
 TABLE       = "open_signal_4g"
@@ -106,7 +107,17 @@ fig.for_each_yaxis(lambda y: y.update(gridcolor="rgba(200,200,200,0.2)"))
 
 st.plotly_chart(fig, use_container_width=True)
 
+# Province notes
+notes = generate_notes(df, selected_col)
+if notes:
+    st.subheader("📝 Insights")
+    for province, province_notes in notes.items():
+        with st.expander(province):
+            for note in province_notes:
+                st.markdown(f"- {note}")
+
 # Raw data toggle
+st.subheader("📋 Raw Data")
 with st.expander("View raw data"):
     st.dataframe(
         df.sort_values(["report_end_date", "network_name"], ascending=[False, True]),
