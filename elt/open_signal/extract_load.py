@@ -8,7 +8,7 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine, text
 
-DATA_PATH   = os.getenv("DATA_PATH", "/data")
+DATA_PATH   = os.getenv("OPEN_SIGNAL_DATA_PATH", "/data/open_signal")
 PG_HOST     = os.getenv("PG_HOST", "host.docker.internal")
 PG_PORT     = os.getenv("PG_PORT", "5432")
 PG_DB       = os.getenv("PG_DB", "service_metrics_db")
