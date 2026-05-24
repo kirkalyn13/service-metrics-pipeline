@@ -31,6 +31,11 @@ def load_data() -> pd.DataFrame:
 # Layout
 st.title("📶 Open Signal — Network Performance")
 st.caption("4G · All networks compared")
+st.set_page_config(
+    page_title="Open Signal",
+    page_icon="📶",
+    layout="wide",
+)
 
 try:
     df = load_data()
