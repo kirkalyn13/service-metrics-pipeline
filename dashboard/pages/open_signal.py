@@ -68,6 +68,10 @@ fig = px.line(
 )
 
 fig.update_layout(
+    title=dict(
+        text=f"<b>{selected_label}</b> — Operator Comparison by Province (Last 13 Weeks)",
+        pad=dict(b=30),  # margin below title
+    ),
     legend=dict(
         orientation="h",
         yanchor="top",
@@ -82,8 +86,14 @@ fig.update_layout(
 )
 
 fig.for_each_annotation(lambda a: a.update(
-    text=a.text.split("=")[-1],
+    text=f"<b>{a.text.split('=')[-1]}</b>",
     textangle=0,
+    x=0.5,
+    xanchor="center",
+    xref="paper",
+    yref="paper",
+    yanchor="bottom",
+    y=a.y + 0.01,
 ))
 
 fig.for_each_xaxis(lambda x: x.update(showgrid=False))
