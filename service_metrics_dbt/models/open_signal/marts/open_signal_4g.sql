@@ -1,1 +1,1 @@
-SELECT * FROM {{ ref('stg_open_signal_4g') }}
+SELECT * FROM {{ ref('stg_open_signal_4g') }} LIMIT 13
