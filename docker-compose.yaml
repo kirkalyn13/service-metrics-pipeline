@@ -114,6 +114,17 @@ services:
       - .env.airflow
     extra_hosts:
       - "host.docker.internal:host-gateway"
+  
+  dashboard:
+    build: ./dashboard
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    networks:
+      - elt_network
+    depends_on:
+      - metrics_postgres
 
 networks:
   elt_network:

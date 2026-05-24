@@ -8,7 +8,7 @@ final AS (
         technology_band,
         location_category,
         area,
-        "location",
+        province,
         round(avg(availability_mean)::NUMERIC, 2) AS avg_availability_pct,
         round(avg(download_mean)::NUMERIC, 2) AS avg_download_mbps,
         round(avg(upload_mean)::NUMERIC, 2) AS avg_upload_mbps,

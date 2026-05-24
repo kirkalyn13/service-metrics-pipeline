@@ -9,7 +9,7 @@ cleaned AS (
         technology,
         trim(location_category) AS location_category,
         trim(area) AS area,
-        trim("location") AS "location",
+        trim("location") AS province,
         availability_devices,
         availability_mean,
         availability_readings,
