@@ -20,7 +20,6 @@ COLOR_MAP = {"S":"#4CAF50", "G":"#2196F3"}
 @st.cache_data(ttl=3600)
 def load_data() -> pd.DataFrame:
     engine = get_engine()
-    cutoff = date.today() - timedelta(weeks=WEEKS)
     query  = f"""
         SELECT report_end_date, network_name, province, download_mean, latency_mean
         FROM {PG_SCHEMA}.{TABLE}
@@ -51,6 +50,23 @@ if df.empty:
 # Metric selector
 selected_label = st.selectbox("Metric", list(METRICS.keys()))
 selected_col   = METRICS[selected_label]
+
+# Province filter
+all_provinces = sorted(df["province"].unique())
+st.markdown("""
+    <style>
+    [data-baseweb="tag"] {
+        background-color: #4CAF50 !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+selected_provinces = st.multiselect(
+    "Province",
+    options=all_provinces,
+    default=all_provinces,
+)
+
+df = df[df["province"].isin(selected_provinces)]
 
 st.divider()
 
@@ -92,14 +108,7 @@ fig.update_layout(
 )
 
 fig.for_each_annotation(lambda a: a.update(
-    text=f"<b>{a.text.split('=')[-1]}</b>",
-    textangle=0,
-    x=0.5,
-    xanchor="center",
-    xref="paper",
-    yref="paper",
-    yanchor="bottom",
-    y=a.y + 0.01,
+    text=f"<b>{a.text.split('=')[-1]}</b>"
 ))
 
 fig.for_each_xaxis(lambda x: x.update(showgrid=False))
