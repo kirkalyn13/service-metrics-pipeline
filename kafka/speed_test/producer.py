@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from datetime import datetime
 from pydantic import BaseModel
 
-KAFKA_BROKER = os.getenv("KAFKA_BROKER", "localhost:9092")
+KAFKA_BROKER = os.getenv("KAFKA_BROKER", "kafka:9092")
 TOPIC        = "speed_test"
 
 producer_config = {"bootstrap.servers": KAFKA_BROKER}
@@ -18,11 +18,11 @@ class SpeedTestResult(BaseModel):
     isp: str
     ip: str
     location: str
-    download_speed: float
-    upload_speed: float
-    idle_latency: int
-    download_latency: int
-    upload_latency: int
+    download_speed_mbps: float
+    upload_speed_mbps: float
+    idle_latency_ms: float
+    download_latency_ms: float
+    upload_latency_ms: float
 
 def delivery_report(err, msg):
     if err:

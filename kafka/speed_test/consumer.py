@@ -3,21 +3,20 @@ import os
 from confluent_kafka import Consumer
 from sqlalchemy import create_engine, text
 
-KAFKA_BROKER = os.getenv("KAFKA_BROKER", "localhost:9092")
-TOPIC        = "speed_test"
+KAFKA_BROKER = os.getenv("KAFKA_BROKER", "kafka:9092")
 PG_HOST     = os.getenv("PG_HOST", "host.docker.internal")
 PG_PORT     = os.getenv("PG_PORT", "5432")
 PG_DB       = os.getenv("PG_DB", "service_metrics_db")
 PG_USER     = os.getenv("PG_USER")
 PG_PASSWORD = os.getenv("PG_PASSWORD")
 PG_SCHEMA   = os.getenv("PG_SCHEMA", "public")
+TOPIC        = "speed_test"
 
 consumer_config = {
     "bootstrap.servers": KAFKA_BROKER,
     "group.id":          "speed-test-consumer",
     "auto.offset.reset": "earliest",
 }
-print(f"Connecting to Kafka at: {KAFKA_BROKER}")
 consumer = Consumer(consumer_config)
 engine   = create_engine(
     f"postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}"
