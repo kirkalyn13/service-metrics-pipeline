@@ -27,7 +27,7 @@ def ensure_table():
     with engine.begin() as conn:
         conn.execute(text(f"""
             CREATE TABLE IF NOT EXISTS {PG_SCHEMA}.raw_speed_test (
-                timestamp               TEXT,
+                timestamp               TIMESTAMP,
                 isp                     TEXT,
                 ip                      TEXT,
                 location                TEXT,
