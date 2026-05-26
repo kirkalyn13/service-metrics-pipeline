@@ -2,7 +2,6 @@ import json
 import os
 from confluent_kafka import Consumer
 from sqlalchemy import create_engine, text
-import subprocess
 
 KAFKA_BROKER = os.getenv("KAFKA_BROKER", "kafka:9092")
 PG_HOST     = os.getenv("PG_HOST", "host.docker.internal")
@@ -22,14 +21,6 @@ consumer = Consumer(consumer_config)
 engine   = create_engine(
     f"postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}"
 )
-
-def run_dbt():
-    subprocess.run([
-        "dbt", "run",
-        "--select", "speed_test.*",
-        "--profiles-dir", "/root",
-        "--project-dir", "/dbt"
-    ], check=True)
 
 def ensure_table():
     with engine.begin() as conn:
@@ -85,7 +76,6 @@ def run():
             ensure_partition(record["timestamp"])
             insert(record)
             print(f"✅ Inserted speed test from {record['ip']} @ {record['location']}")
-            run_dbt()
 
     except KeyboardInterrupt:
         print("\n🔴 Stopping consumer")

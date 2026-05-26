@@ -164,9 +164,6 @@ services:
       - .env
     networks:
       - service-metrics-pipeline-network
-    volumes:
-      - ./service_metrics_dbt:/dbt
-      - ~/.dbt:/root
     depends_on:
       metrics_postgres:
         condition: service_healthy
