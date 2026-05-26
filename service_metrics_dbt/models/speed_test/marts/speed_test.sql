@@ -1,0 +1,11 @@
+SELECT
+    DATE_TRUNC('hour', timestamp)   AS timestamp,
+    ip,
+    isp,
+    location,
+    AVG(download_speed_mbps)        AS download_speed_mbps,
+    AVG(download_latency_ms)        AS download_latency_ms,
+    AVG(idle_latency_ms)            AS idle_latency_ms
+FROM public.raw_speed_test
+GROUP BY 1, 2, 3, 4
+ORDER BY 1 DESC

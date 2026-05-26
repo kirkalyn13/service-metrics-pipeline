@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: speed_test
+    description: "Staged speed test data — cleaned nulls, trimmed strings"
+    columns:
+      - name: timestamp
+        tests: [not_null]
+      - name: ip
+        tests: [not_null]
+      - name: isp
+        tests: [not_null]
+      - name: location
+        tests: [not_null]

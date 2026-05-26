@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: raw_speed_test
+    schema: public
+    description: "Raw speed test stats consumed via kafka"
+    tables:
+      - name: raw_speed_test
+        description: "Raw speed test stats"
+        columns:
+          - name: timestamp
+            tests: [not_null]
+          - name: isp
+            tests: [not_null]
+          - name: ip
+            tests: [not_null]
+          - name: location
+            tests: [not_null]
