@@ -44,9 +44,18 @@ def ensure_table():
                 idle_latency_ms         DOUBLE PRECISION,
                 download_latency_ms     DOUBLE PRECISION,
                 upload_latency_ms       DOUBLE PRECISION
-            )
+            ) PARTITION BY RANGE (timestamp)
         """))
 
+def ensure_partition(timestamp: str):
+    year = timestamp[:4]
+    next_year = int(year) + 1
+    with engine.begin() as conn:
+        conn.execute(text(f"""
+            CREATE TABLE IF NOT EXISTS {PG_SCHEMA}.raw_speed_test_y{year}
+            PARTITION OF {PG_SCHEMA}.raw_speed_test
+            FOR VALUES FROM ('{year}-01-01') TO ('{next_year}-01-01')
+        """))
 
 def insert(record: dict):
     with engine.begin() as conn:
@@ -73,6 +82,7 @@ def run():
                 continue
 
             record = json.loads(msg.value().decode("utf-8"))
+            ensure_partition(record["timestamp"])
             insert(record)
             print(f"✅ Inserted speed test from {record['ip']} @ {record['location']}")
             run_dbt()
