@@ -20,9 +20,9 @@ st.divider()
 col1, col2 = st.columns(2)
 
 with col1:
-    st.metric(label="Networks Tracked", value="2")
+    st.metric(label="Networks Tracked", value="3")
 with col2:
-    st.metric(label="Technology", value="4G")
+    st.metric(label="Technology", value="4G, Fiber")
 
 st.divider()
 
@@ -31,4 +31,8 @@ st.markdown("""
 **📶 Open Signal**  
 Time series analysis of download speed and latency per province, 
 comparing network operators S and G over the last quarter.
+""")
+st.markdown("""
+**🏍️ Speed Test**  
+Time series analysis of Ookla download speed and latency per reported location.
 """)
