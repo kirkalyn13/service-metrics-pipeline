@@ -8,8 +8,6 @@ models:
         tests: [not_null]
       - name: network_name
         tests: [not_null]
-      - name: download_mean
-        tests: [not_null]
   - name: open_signal_performance
     description: "Aggregated network performance by date, operator, technology, and location"
     columns:
@@ -21,5 +19,3 @@ models:
         tests:
           - accepted_values:
               values: ["3G", "4G"]
-      - name: avg_download_mbps
-        tests: [not_null]

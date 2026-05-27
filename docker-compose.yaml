@@ -40,33 +40,33 @@ services:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 5s
       retries: 5
-  # extract_load_open_signal:
-  #   build:
-  #     context: ./elt/open_signal
-  #     dockerfile: Dockerfile
-  #   command: ["python", "extract_load.py"]
-  #   volumes:
-  #     - ./data:/data
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - service-metrics-pipeline-network
-  #   depends_on:
-  #     metrics_postgres:
-  #       condition: service_healthy
-  # dbt:
-  #   image: ghcr.io/dbt-labs/dbt-postgres:1.4.7
-  #   command: ["run", "--profiles-dir", "/root", "--project-dir", "/dbt"]
-  #   networks:
-  #     - service-metrics-pipeline-network
-  #   volumes:
-  #     - ./service_metrics_dbt:/dbt
-  #     - ~/.dbt:/root
-  #   depends_on:
-  #     extract_load_open_signal:
-  #       condition: service_completed_successfully 
-  #   env_file:
-  #     - .env
+  extract_load_open_signal:
+    build:
+      context: ./elt/open_signal
+      dockerfile: Dockerfile
+    command: ["python", "extract_load.py"]
+    volumes:
+      - ./data:/data
+    env_file:
+      - .env
+    networks:
+      - service-metrics-pipeline-network
+    depends_on:
+      metrics_postgres:
+        condition: service_healthy
+  dbt:
+    image: ghcr.io/dbt-labs/dbt-postgres:1.4.7
+    command: ["run", "--profiles-dir", "/root", "--project-dir", "/dbt"]
+    networks:
+      - service-metrics-pipeline-network
+    volumes:
+      - ./service_metrics_dbt:/dbt
+      - ~/.dbt:/root
+    depends_on:
+      extract_load_open_signal:
+        condition: service_completed_successfully 
+    env_file:
+      - .env
   postgres:
     image: postgres:15
     env_file:

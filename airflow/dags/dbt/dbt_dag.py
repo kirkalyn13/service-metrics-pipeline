@@ -9,8 +9,8 @@ from airflow.operators.bash import BashOperator
 
 default_args = {
     "owner":            "engineering",
-    "retries":          0,
-    "retry_delay":      timedelta(minutes=5),
+    "retries":          2,
+    "retry_delay":      timedelta(minutes=1),
     "email_on_failure": False,
 }
 
