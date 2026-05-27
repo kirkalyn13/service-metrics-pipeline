@@ -42,7 +42,7 @@ except Exception as e:
     st.stop()
 
 if df.empty:
-    st.warning("No data found for the last 13 weeks.")
+    st.warning("No data found for the last 72 hours.")
     st.stop()
 
 # Metric selector
