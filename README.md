@@ -39,7 +39,7 @@ flowchart LR
 
 ## Dashboard
 
-![Open Signal Dashboard](./assets/open_signal_dashboard.png)
+![Dashboard](./assets/open_signal_dashboard.png)
 
 Accessible via browser on the local network at `http://localhost:8501`.
 
