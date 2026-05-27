@@ -1,7 +1,9 @@
 version: "3.8"
 
 x-airflow-common: &airflow-common
-  image: apache/airflow:2.9.1
+  build:
+    context: .
+    dockerfile: Dockerfile.airflow
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -10,6 +12,7 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
     AIRFLOW__CORE__LOAD_EXAMPLES: "false"
     AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth"
+    AIRFLOW__WEBSERVER__SECRET_KEY: "airflow"
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
@@ -20,6 +23,9 @@ x-airflow-common: &airflow-common
       condition: service_healthy
   extra_hosts:
     - "host.docker.internal:host-gateway"
+  networks:
+    - default
+    - service-metrics-pipeline-network
 
 services:
   metrics_postgres:
@@ -34,33 +40,33 @@ services:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 5s
       retries: 5
-  extract_load_open_signal:
-    build:
-      context: ./elt/open_signal
-      dockerfile: Dockerfile
-    command: ["python", "extract_load.py"]
-    volumes:
-      - ./data:/data
-    env_file:
-      - .env
-    networks:
-      - service-metrics-pipeline-network
-    depends_on:
-      metrics_postgres:
-        condition: service_healthy
-  dbt:
-    image: ghcr.io/dbt-labs/dbt-postgres:1.4.7
-    command: ["run", "--profiles-dir", "/root", "--project-dir", "/dbt"]
-    networks:
-      - service-metrics-pipeline-network
-    volumes:
-      - ./service_metrics_dbt:/dbt
-      - ~/.dbt:/root
-    depends_on:
-      extract_load_open_signal:
-        condition: service_completed_successfully 
-    env_file:
-      - .env
+  # extract_load_open_signal:
+  #   build:
+  #     context: ./elt/open_signal
+  #     dockerfile: Dockerfile
+  #   command: ["python", "extract_load.py"]
+  #   volumes:
+  #     - ./data:/data
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - service-metrics-pipeline-network
+  #   depends_on:
+  #     metrics_postgres:
+  #       condition: service_healthy
+  # dbt:
+  #   image: ghcr.io/dbt-labs/dbt-postgres:1.4.7
+  #   command: ["run", "--profiles-dir", "/root", "--project-dir", "/dbt"]
+  #   networks:
+  #     - service-metrics-pipeline-network
+  #   volumes:
+  #     - ./service_metrics_dbt:/dbt
+  #     - ~/.dbt:/root
+  #   depends_on:
+  #     extract_load_open_signal:
+  #       condition: service_completed_successfully 
+  #   env_file:
+  #     - .env
   postgres:
     image: postgres:15
     env_file:
@@ -91,7 +97,7 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./elt:/opt/airflow/elt
       - ./service_metrics_dbt:/opt/dbt
-      - ~/.dbt:/root/.dbt
+      - ~/.dbt:/home/airflow/.dbt
       - /var/run/docker.sock:/var/run/docker.sock
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
@@ -107,7 +113,7 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./elt:/opt/airflow/elt
       - ./service_metrics_dbt:/opt/dbt
-      - ~/.dbt:/root/.dbt
+      - ~/.dbt:/home/airflow/.dbt
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
     env_file:

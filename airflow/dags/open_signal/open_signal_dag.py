@@ -16,7 +16,7 @@ from elt.open_signal.extract_load import run as _run_elt
 
 default_args = {
     "owner":            "engineering",
-    "retries":          2,
+    "retries":          0,
     "retry_delay":      timedelta(minutes=5),
     "email_on_failure": False,
 }

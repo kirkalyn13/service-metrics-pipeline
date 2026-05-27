@@ -9,13 +9,13 @@ from airflow.operators.bash import BashOperator
 
 default_args = {
     "owner":            "engineering",
-    "retries":          2,
+    "retries":          0,
     "retry_delay":      timedelta(minutes=5),
     "email_on_failure": False,
 }
 
 DBT_DIR      = "/opt/dbt"
-PROFILES_DIR = "/root"
+PROFILES_DIR = "/home/airflow/.dbt"
 SCHEDULE = "*/15 * * * *"
 
 with DAG(
