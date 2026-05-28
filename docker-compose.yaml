@@ -53,9 +53,9 @@ services:
       retries: 5
   extract_load_open_signal:
     build:
-      context: ./elt/open_signal
+      context: ./elt
       dockerfile: Dockerfile
-    command: ["python", "extract_load.py"]
+    command: ["python", "open_signal/extract_load.py"]
     volumes:
       - ./data:/data
     env_file:
