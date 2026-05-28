@@ -5,16 +5,13 @@ Raw tables are partitioned by year on report_end_date.
 """
 
 import os
+import sys
 import pandas as pd
-from sqlalchemy import create_engine, text
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from db import ensure_partitioned_table, load_to_postgres
 
 DATA_PATH   = os.getenv("OPEN_SIGNAL_DATA_PATH", "/data/open_signal")
-PG_HOST     = os.getenv("PG_HOST", "host.docker.internal")
-PG_PORT     = os.getenv("PG_PORT", "5432")
-PG_DB       = os.getenv("PG_DB", "service_metrics_db")
-PG_USER     = os.getenv("PG_USER")
-PG_PASSWORD = os.getenv("PG_PASSWORD")
-PG_SCHEMA   = os.getenv("PG_SCHEMA", "public")
 
 COLUMN_MAP = {
     "Aggregation":                   "aggregation",
@@ -89,39 +86,7 @@ def extract() -> pd.DataFrame:
     df["report_end_date"] = pd.to_datetime(df["report_end_date"]).dt.date
     return df
 
-
-def ensure_partitioned_table(engine, table: str, years: list) -> None:
-    with engine.begin() as conn:
-        # Create parent partitioned table
-        conn.execute(text(TABLE_DDL.format(schema=PG_SCHEMA, table=table)))
-
-        # Create a partition for each year found in the data
-        for year in years:
-            conn.execute(text(PARTITION_DDL.format(
-                schema=PG_SCHEMA,
-                table=table,
-                year=year,
-                next_year=year + 1,
-            )))
-    print(f"  Partitions ensured for years: {years} -> {PG_SCHEMA}.{table}")
-
-
-def load_to_postgres(df: pd.DataFrame, table: str, engine) -> None:
-    df.to_sql(
-        name=table,
-        con=engine,
-        schema=PG_SCHEMA,
-        if_exists="append",
-        index=False,
-    )
-    print(f"  Loaded {len(df)} rows -> {PG_SCHEMA}.{table}")
-
-
 def run():
-    engine = create_engine(
-        f"postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}"
-    )
-
     print("Extracting from XLSX…")
     df = extract()
 
@@ -135,10 +100,10 @@ def run():
         years    = sorted(subset["report_end_date"].apply(lambda d: d.year).unique().tolist())
 
         print(f"Ensuring partitioned table for {tech}…")
-        ensure_partitioned_table(engine, table, years)
+        ensure_partitioned_table(table, TABLE_DDL, PARTITION_DDL, years)
 
         print(f"Loading {tech} data…")
-        load_to_postgres(subset, table, engine)
+        load_to_postgres(subset, table)
 
     print("Done.")
 

@@ -51,11 +51,17 @@ services:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 5s
       retries: 5
-  extract_load_open_signal:
+
+  extract_load:
     build:
       context: ./elt
       dockerfile: Dockerfile
     command: ["python", "open_signal/extract_load.py"]
+    # command: >
+    #   bash -c "
+    #     python open_signal/extract_load.py &&
+    #     python high_utilization/extract_load.py
+    #   "
     volumes:
       - ./data:/data
     env_file:
@@ -65,6 +71,7 @@ services:
     depends_on:
       metrics_postgres:
         condition: service_healthy
+
   dbt:
     image: ghcr.io/dbt-labs/dbt-postgres:1.4.7
     command: ["run", "--profiles-dir", "/root", "--project-dir", "/dbt"]
@@ -74,10 +81,11 @@ services:
       - ./service_metrics_dbt:/dbt
       - ~/.dbt:/root
     depends_on:
-      extract_load_open_signal:
+      extract_load:
         condition: service_completed_successfully 
     env_file:
       - .env
+
   postgres:
     image: postgres:15
     environment:

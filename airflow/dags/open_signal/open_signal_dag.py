@@ -12,6 +12,7 @@ import sys, os
 
 sys.path.insert(0, '/opt/airflow')
 sys.path.insert(0, "/opt/elt/open_signal")
+
 from elt.open_signal.extract_load import run as _run_elt
 
 default_args = {
