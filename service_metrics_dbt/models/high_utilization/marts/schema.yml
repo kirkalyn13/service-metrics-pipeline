@@ -1,0 +1,10 @@
+# version: 2
+
+# models:
+#   - name: open_signal_4g
+#     description: "Staged 4G signal data — cleaned nulls, trimmed strings"
+#     columns:
+#       - name: report_end_date
+#         tests: [not_null]
+#       - name: network_name
+#         tests: [not_null]
