@@ -38,9 +38,14 @@ with DAG(
         bash_command=f"cd {DBT_DIR} && dbt run --select speed_test.* --profiles-dir {PROFILES_DIR} --project-dir {DBT_DIR}",
     )
 
+    t_dbt_run_high_utilization = BashOperator(
+        task_id="dbt_run_high_utilization",
+        bash_command=f"cd {DBT_DIR} && dbt run --select high_utilization.* --profiles-dir {PROFILES_DIR} --project-dir {DBT_DIR}",
+    )
+
     t_dbt_test = BashOperator(
         task_id="dbt_test",
         bash_command=f"cd {DBT_DIR} && dbt test --profiles-dir {PROFILES_DIR} --project-dir {DBT_DIR}",
     )
 
-    [t_dbt_run_open_signal, t_dbt_run_speed_test] >> t_dbt_test
+    [t_dbt_run_open_signal, t_dbt_run_speed_test, t_dbt_run_high_utilization] >> t_dbt_test

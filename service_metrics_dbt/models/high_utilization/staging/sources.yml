@@ -1,18 +1,34 @@
-# version: 2
+version: 2
 
-# sources:
-#   - name: raw_open_signal_4g
-#     schema: public
-#     description: "Raw signal stats loaded from open signal xlsx file"
-#     tables:
-#       - name: raw_open_signal_4g
-#         description: "Raw 4G network signal statistics"
-#         columns:
-#           - name: report_end_date
-#             tests: [not_null]
-#           - name: network_name
-#             tests: [not_null]
-#           - name: technology
-#             tests:
-#               - accepted_values:
-#                   values: ["4G"]
+sources:
+  - name: raw_high_utilization
+    schema: public
+    description: "Raw high utilization data loaded from open signal xlsx file"
+    tables:
+      - name: raw_high_utilization
+        description: "Raw high utilization data"
+        columns:
+          - name: week
+            tests: [not_null]
+          - name: date
+            tests: [not_null]
+          - name: tech
+            tests: [not_null]
+          - name: vendor
+            tests: [not_null]
+          - name: site_no
+            tests: [not_null]
+          - name: site_name
+            tests: [not_null]
+          - name: bts_name
+            tests: [not_null]
+          - name: cell_name
+            tests: [not_null]
+          - name: municipality
+            tests: [not_null]
+          - name: province
+            tests: [not_null]
+          - name: area
+            tests: [not_null]
+          - name: band
+            tests: [not_null]

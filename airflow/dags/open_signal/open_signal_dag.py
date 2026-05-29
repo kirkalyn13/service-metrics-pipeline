@@ -31,9 +31,9 @@ def ensure_schema(**_):
     """Create the raw schema and tables if they don't exist."""
     hook = PostgresHook(postgres_conn_id="open_signal_postgres")
     ddl = """
-        CREATE TABLE IF NOT EXISTS signal_stats_4g (
-            aggregation                  INTEGER,
-            report_end_date              DATE,
+        CREATE TABLE IF NOT EXISTS open_signal_4g (
+             aggregation                  INTEGER,
+            report_end_date              DATE NOT NULL,
             network_name                 TEXT,
             technology                   TEXT,
             location_category            TEXT,
@@ -60,8 +60,8 @@ def ensure_schema(**_):
             voiceappexperience_readings  DOUBLE PRECISION
         );
 
-        CREATE TABLE IF NOT EXISTS signal_stats_3g
-            (LIKE signal_stats_4g INCLUDING ALL);
+        CREATE TABLE IF NOT EXISTS open_signal_4g
+            (LIKE open_signal_4g INCLUDING ALL);
     """
     hook.run(ddl)
     print("Schema & tables ready.")

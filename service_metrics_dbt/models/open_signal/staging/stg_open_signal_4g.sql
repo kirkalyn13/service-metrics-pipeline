@@ -30,7 +30,7 @@ cleaned AS (
         voiceappexperience_readings,
         number_of_records
     FROM source
-    where report_end_date IS NOT NULL
+    WHERE report_end_date IS NOT NULL
       AND network_name IS NOT NULL
 )
 SELECT * FROM cleaned

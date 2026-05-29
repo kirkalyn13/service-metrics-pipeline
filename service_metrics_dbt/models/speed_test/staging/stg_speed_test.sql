@@ -13,7 +13,7 @@ cleaned AS (
         download_latency_ms,
         upload_latency_ms 
     FROM source
-    where "timestamp" IS NOT NULL
+    WHERE "timestamp" IS NOT NULL
       AND ip IS NOT NULL
       AND isp IS NOT NULL
       AND "location" IS NOT NULL

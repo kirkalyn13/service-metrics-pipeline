@@ -56,12 +56,12 @@ services:
     build:
       context: ./elt
       dockerfile: Dockerfile
-    command: ["python", "open_signal/extract_load.py"]
-    # command: >
-    #   bash -c "
-    #     python open_signal/extract_load.py &&
-    #     python high_utilization/extract_load.py
-    #   "
+    # command: ["python", "open_signal/extract_load.py"]
+    command: >
+      bash -c "
+        python open_signal/extract_load.py &&
+        python high_utilization/extract_load.py
+      "
     volumes:
       - ./data:/data
     env_file:

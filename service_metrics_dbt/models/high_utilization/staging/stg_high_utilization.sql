@@ -1,36 +1,31 @@
--- WITH source AS (
---     SELECT * FROM {{ source('raw_open_signal_4g', 'raw_open_signal_4g') }}
--- ),
--- cleaned AS (
---     SELECT
---         aggregation,
---         report_end_date,
---         trim(network_name) AS network_name,
---         technology,
---         trim(location_category) AS location_category,
---         trim(area) AS area,
---         trim("location") AS province,
---         availability_devices,
---         availability_mean,
---         availability_readings,
---         download_devices,
---         download_mean,
---         download_readings,
---         upload_devices,
---         upload_mean,
---         upload_readings,
---         latency_devices,
---         latency_mean,
---         latency_readings,
---         videoexperience_devices,
---         videoexperience_mean,
---         videoexperience_readings,
---         voiceappexperience_devices,
---         voiceappexperience_mean,
---         voiceappexperience_readings,
---         number_of_records
---     FROM source
---     where report_end_date IS NOT NULL
---       AND network_name IS NOT NULL
--- )
--- SELECT * FROM cleaned
+WITH source AS (
+    SELECT * FROM {{ source('raw_high_utilization', 'raw_high_utilization') }}
+),
+cleaned AS (
+    SELECT
+        "week",
+        "date",
+        trim(tech) AS tech,
+        trim(vendor) AS vendor,
+        trim(site_no) AS site_no,
+        trim(site_name) AS site_name,
+        trim(bts_name) AS bts_name,
+        trim(cell_name) AS cell_name,
+        trim(municipality) AS municipality,
+        trim(province) AS province,
+        trim(area) AS area,
+        trim(band) AS band,
+        prb_utilization,
+        rrc_user,
+        payload,
+        dl_user_throughput_kbps,
+        ul_user_throughput_kbps,
+        site_status
+    FROM source
+    WHERE "week" IS NOT NULL
+      AND "date" IS NOT NULL
+      AND province IS NOT NULL
+      AND municipality IS NOT NULL
+      AND area IS NOT NULL
+)
+SELECT * FROM cleaned

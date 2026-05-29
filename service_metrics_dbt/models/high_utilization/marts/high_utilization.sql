@@ -9,8 +9,7 @@
 --             PARTITION BY network_name, province
 --             ORDER BY report_end_date DESC
 --         ) AS rn
---     FROM {{ ref('stg_open_signal_4g') }}
+--     FROM {{ ref('stg_high_utilization') }}
 -- )
 
--- SELECT * FROM ranked
--- WHERE rn <= 13
+SELECT * FROM {{ ref('stg_high_utilization') }} LIMIT 10

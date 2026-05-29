@@ -1,10 +1,30 @@
-# version: 2
+version: 2
 
-# models:
-#   - name: open_signal_4g
-#     description: "Staged 4G signal data — cleaned nulls, trimmed strings"
-#     columns:
-#       - name: report_end_date
-#         tests: [not_null]
-#       - name: network_name
-#         tests: [not_null]
+models:
+  - name: high_utilization
+    description: "Staged high utilization data — cleaned nulls, trimmed strings"
+    columns:
+      - name: week
+        tests: [not_null]
+      - name: date
+        tests: [not_null]
+      - name: tech
+        tests: [not_null]
+      - name: vendor
+        tests: [not_null]
+      - name: site_no
+        tests: [not_null]
+      - name: site_name
+        tests: [not_null]
+      - name: bts_name
+        tests: [not_null]
+      - name: cell_name
+        tests: [not_null]
+      - name: municipality
+        tests: [not_null]
+      - name: province
+        tests: [not_null]
+      - name: area
+        tests: [not_null]
+      - name: band
+        tests: [not_null]

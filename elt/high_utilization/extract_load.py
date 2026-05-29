@@ -64,8 +64,9 @@ PARTITION_DDL = """
 
 
 def extract() -> pd.DataFrame:
-    df = pd.read_csv(DATA_PATH)
+    df = pd.read_csv(DATA_PATH, encoding="latin-1")
     df.rename(columns=COLUMN_MAP, inplace=True)
+    df = df[[col for col in COLUMN_MAP.values() if col in df.columns]]
     df["date"] = pd.to_datetime(df["date"]).dt.date
     return df
 
@@ -73,19 +74,15 @@ def run():
     print("Extracting from XLSX…")
     df = extract()
 
-    technologies = df["technology"].unique()
-    print(f"Technologies found: {list(technologies)}")
+    table    = f"raw_high_utilization"
+    years    = sorted(df["date"].apply(lambda d: d.year).unique().tolist())
 
-    for tech in technologies:
-        table    = f"raw_high_utilization"
-        years    = sorted(df["date"].apply(lambda d: d.year).unique().tolist())
+    print(f"Ensuring partitioned table…")
+    ensure_partitioned_table(table, TABLE_DDL, PARTITION_DDL, years)
 
-        print(f"Ensuring partitioned table…")
-        ensure_partitioned_table(table, TABLE_DDL, PARTITION_DDL, years)
-
-        print(f"Loading high utilization data…")
-        load_to_postgres(df, table)
-
+    print(f"Loading high utilization data…")
+    load_to_postgres(df, table)
+        
     print("Done.")
 
 

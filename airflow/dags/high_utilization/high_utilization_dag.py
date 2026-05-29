@@ -22,7 +22,7 @@ default_args = {
     "email_on_failure": False,
 }
 
-DAG_ID   = "open_signal_pipeline"
+DAG_ID   = "high_utilization_pipeline"
 SCHEDULE = "@daily"
 DBT_DIR  = "/opt/dbt"
 
@@ -31,37 +31,26 @@ def ensure_schema(**_):
     """Create the raw schema and tables if they don't exist."""
     hook = PostgresHook(postgres_conn_id="open_signal_postgres")
     ddl = """
-        CREATE TABLE IF NOT EXISTS signal_stats_4g (
-            aggregation                  INTEGER,
-            report_end_date              DATE,
-            network_name                 TEXT,
-            technology                   TEXT,
-            location_category            TEXT,
+        CREATE TABLE IF NOT EXISTS high_utilization (
+            week                         INTEGER,
+            date                         DATE NOT NULL,
+            tech                         TEXT,
+            vendor                       TEXT,
+            site_no                      TEXT,
+            site_name                    TEXT,
+            bts_name                     TEXT,
+            cell_name                    TEXT,
+            municipality                 TEXT,
+            province                     TEXT,
             area                         TEXT,
-            location                     TEXT,
-            availability_devices         DOUBLE PRECISION,
-            availability_mean            DOUBLE PRECISION,
-            availability_readings        DOUBLE PRECISION,
-            download_devices             DOUBLE PRECISION,
-            download_mean                DOUBLE PRECISION,
-            download_readings            DOUBLE PRECISION,
-            latency_devices              DOUBLE PRECISION,
-            latency_mean                 DOUBLE PRECISION,
-            latency_readings             DOUBLE PRECISION,
-            number_of_records            INTEGER,
-            upload_devices               DOUBLE PRECISION,
-            upload_mean                  DOUBLE PRECISION,
-            upload_readings              DOUBLE PRECISION,
-            videoexperience_devices      DOUBLE PRECISION,
-            videoexperience_mean         DOUBLE PRECISION,
-            videoexperience_readings     DOUBLE PRECISION,
-            voiceappexperience_devices   DOUBLE PRECISION,
-            voiceappexperience_mean      DOUBLE PRECISION,
-            voiceappexperience_readings  DOUBLE PRECISION
+            band                         TEXT,
+            prb_utilization              DOUBLE PRECISION,
+            rrc_user                     DOUBLE PRECISION,
+            payload                      DOUBLE PRECISION,
+            dl_user_throughput_kbps      DOUBLE PRECISION,
+            ul_user_throughput_kbps      DOUBLE PRECISION,
+            site_status                  TEXT
         );
-
-        CREATE TABLE IF NOT EXISTS signal_stats_3g
-            (LIKE signal_stats_4g INCLUDING ALL);
     """
     hook.run(ddl)
     print("Schema & tables ready.")
@@ -70,11 +59,11 @@ def ensure_schema(**_):
 with DAG(
     dag_id=DAG_ID,
     default_args=default_args,
-    description="NL Open Signal: XLSX -> Postgres -> dbt",
+    description="NL High Utilization: CSV -> Postgres -> dbt",
     schedule_interval=SCHEDULE,
     start_date=datetime(2024, 1, 1),
     catchup=False,
-    tags=["open signal", "elt", "dbt", "metrics"],
+    tags=["high utiization", "elt", "dbt", "metrics"],
 ) as dag:
 
     t_schema = PythonOperator(
@@ -83,7 +72,7 @@ with DAG(
     )
 
     t_extract_load = PythonOperator(
-        task_id="extract_load_xlsx",
+        task_id="extract_load_csv",
         python_callable=_run_elt,
     )
 
