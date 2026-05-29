@@ -36,3 +36,7 @@ st.markdown("""
 **🏍️ Speed Test**  
 Time series analysis of Ookla download speed and latency per reported location.
 """)
+st.markdown("""
+**📡 High Utilization**  
+Weekly Summary report for sites with High PRB Utilization.
+""")

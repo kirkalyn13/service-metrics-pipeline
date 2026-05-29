@@ -3,7 +3,7 @@ import streamlit as st
 import plotly.express as px
 from db import get_engine, PG_SCHEMA
 
-TABLE = "mart_high_utilization_nl"
+TABLE = "high_utilization_nl"
 
 st.set_page_config(
     page_title="High Utilization — NL",
@@ -19,8 +19,7 @@ def load_data() -> pd.DataFrame:
             "week", "date", tech, vendor,
             site_name, cell_name, municipality, province, band,
             prb_utilization, rrc_user, payload,
-            dl_user_throughput_kbps, ul_user_throughput_kbps,
-            site_status, is_high_util
+            dl_user_throughput_kbps, site_status, is_high_util
         FROM {PG_SCHEMA}.{TABLE}
         ORDER BY "date" DESC, site_name, cell_name
     """
@@ -91,7 +90,7 @@ breach_df = (
 
 st.dataframe(
     breach_df.style.background_gradient(
-        subset=["prb_utilization"], cmap="Reds", vmin=90, vmax=100
+        subset=["prb_utilization"], cmap="Reds", vmin=0.9, vmax=1
     ),
     use_container_width=True,
 )
@@ -121,12 +120,12 @@ fig = px.bar(
     },
     title=f"PRB Utilization — {selected_site}",
 )
-fig.add_hline(y=90, line_dash="dash", line_color="orange", annotation_text="90% threshold")
+fig.add_hline(y=0.9, line_dash="dash", line_color="orange", annotation_text="90% threshold")
 fig.update_layout(
     plot_bgcolor="rgba(0,0,0,0)",
     legend=dict(orientation="h", yanchor="top", y=1.08, xanchor="right", x=1),
 )
-fig.update_yaxes(gridcolor="rgba(200,200,200,0.2)", range=[0, 105])
+fig.update_yaxes(gridcolor="rgba(200,200,200,0.2)", range=[0, 1.05])
 st.plotly_chart(fig, use_container_width=True)
 
 # Payload + RRC sub-metrics
