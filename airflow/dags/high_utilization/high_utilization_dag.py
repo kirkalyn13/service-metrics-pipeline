@@ -78,12 +78,12 @@ with DAG(
 
     t_dbt_run = BashOperator(
         task_id="dbt_run",
-        bash_command=f"cd {DBT_DIR} && dbt run --profiles-dir /home/airflow/.dbt --target dev",
+        bash_command=f"cd {DBT_DIR} && dbt run --select high_utilization.* --profiles-dir /home/airflow/.dbt --target dev",
     )
 
     t_dbt_test = BashOperator(
         task_id="dbt_test",
-        bash_command=f"cd {DBT_DIR} && dbt test --profiles-dir /home/airflow/.dbt --target dev",
+        bash_command=f"cd {DBT_DIR} && dbt test --select high_utilization.* --profiles-dir /home/airflow/.dbt --target dev",
     )
 
     t_schema >> t_extract_load >> t_dbt_run >> t_dbt_test

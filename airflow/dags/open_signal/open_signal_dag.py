@@ -32,36 +32,12 @@ def ensure_schema(**_):
     hook = PostgresHook(postgres_conn_id="open_signal_postgres")
     ddl = """
         CREATE TABLE IF NOT EXISTS open_signal_4g (
-             aggregation                  INTEGER,
             report_end_date              DATE NOT NULL,
             network_name                 TEXT,
-            technology                   TEXT,
-            location_category            TEXT,
-            area                         TEXT,
-            location                     TEXT,
-            availability_devices         DOUBLE PRECISION,
-            availability_mean            DOUBLE PRECISION,
-            availability_readings        DOUBLE PRECISION,
-            download_devices             DOUBLE PRECISION,
+            province                     TEXT,
             download_mean                DOUBLE PRECISION,
-            download_readings            DOUBLE PRECISION,
-            latency_devices              DOUBLE PRECISION,
-            latency_mean                 DOUBLE PRECISION,
-            latency_readings             DOUBLE PRECISION,
-            number_of_records            INTEGER,
-            upload_devices               DOUBLE PRECISION,
-            upload_mean                  DOUBLE PRECISION,
-            upload_readings              DOUBLE PRECISION,
-            videoexperience_devices      DOUBLE PRECISION,
-            videoexperience_mean         DOUBLE PRECISION,
-            videoexperience_readings     DOUBLE PRECISION,
-            voiceappexperience_devices   DOUBLE PRECISION,
-            voiceappexperience_mean      DOUBLE PRECISION,
-            voiceappexperience_readings  DOUBLE PRECISION
+            rn                           BIGINT
         );
-
-        CREATE TABLE IF NOT EXISTS open_signal_4g
-            (LIKE open_signal_4g INCLUDING ALL);
     """
     hook.run(ddl)
     print("Schema & tables ready.")
@@ -89,12 +65,12 @@ with DAG(
 
     t_dbt_run = BashOperator(
         task_id="dbt_run",
-        bash_command=f"cd {DBT_DIR} && dbt run --profiles-dir /home/airflow/.dbt --target dev",
+        bash_command=f"cd {DBT_DIR} && dbt run --select open_signal.* --profiles-dir /home/airflow/.dbt --target dev",
     )
 
     t_dbt_test = BashOperator(
         task_id="dbt_test",
-        bash_command=f"cd {DBT_DIR} && dbt test --profiles-dir /home/airflow/.dbt --target dev",
+        bash_command=f"cd {DBT_DIR} && dbt test --select open_signal.* --profiles-dir /home/airflow/.dbt --target dev",
     )
 
     t_schema >> t_extract_load >> t_dbt_run >> t_dbt_test
