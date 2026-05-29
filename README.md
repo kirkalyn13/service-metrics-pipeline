@@ -2,6 +2,8 @@
 
 A locally hosted end-to-end data pipeline designed for team use in analysing network service metrics. The pipeline ingests raw network performance data, transforms it through a series of stages, and presents it via an interactive dashboard accessible to the entire team on a local network.
 
+![Airflow](./assets/airflow.png)
+
 ## Stack
 - **Ingestion**: Python + Pandas, FastAPI + Confluent Kafka
 - **Storage**: PostgreSQL
@@ -39,11 +41,23 @@ flowchart LR
 
 ## Dashboard
 
-![Dashboard](./assets/open_signal_dashboard.png)
-
 Accessible via browser on the local network at `http://localhost:8501`.
 
 Built with Streamlit and Plotly, the dashboard reads from the mart layer.
+
+### Available Dashboards
+
+- Open Signal
+
+![Dashboard](./assets/open_signal_dashboard.png)
+
+- High Utilization
+
+![Dashboard](./assets/high_utilization_dashboard.png)
+
+- Speed Test
+
+![Dashboard](./assets/speed_test_dashboard.png)
 
 ## Structure
 ```
@@ -69,7 +83,6 @@ service_metrics_pipeline/
 Copy and fill in the env each files:
 ```bash
 cp .env.example .env
-cp .env.airflow.example .env.airflow
 ```
 
 ### 2. Start all services
