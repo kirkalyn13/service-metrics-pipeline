@@ -31,25 +31,22 @@ def ensure_schema(**_):
     """Create the raw schema and tables if they don't exist."""
     hook = PostgresHook(postgres_conn_id="open_signal_postgres")
     ddl = """
-        CREATE TABLE IF NOT EXISTS high_utilization (
+        CREATE TABLE IF NOT EXISTS mart_high_utilization_nl (
             week                         INTEGER,
             date                         DATE NOT NULL,
             tech                         TEXT,
             vendor                       TEXT,
-            site_no                      TEXT,
             site_name                    TEXT,
-            bts_name                     TEXT,
             cell_name                    TEXT,
             municipality                 TEXT,
             province                     TEXT,
-            area                         TEXT,
             band                         TEXT,
             prb_utilization              DOUBLE PRECISION,
             rrc_user                     DOUBLE PRECISION,
             payload                      DOUBLE PRECISION,
             dl_user_throughput_kbps      DOUBLE PRECISION,
-            ul_user_throughput_kbps      DOUBLE PRECISION,
-            site_status                  TEXT
+            site_status                  TEXT,
+            is_high_util                 BOOLEAN
         );
     """
     hook.run(ddl)

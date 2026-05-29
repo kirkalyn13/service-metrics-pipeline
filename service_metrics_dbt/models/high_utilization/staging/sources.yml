@@ -20,8 +20,6 @@ sources:
             tests: [not_null]
           - name: site_name
             tests: [not_null]
-          - name: bts_name
-            tests: [not_null]
           - name: cell_name
             tests: [not_null]
           - name: municipality

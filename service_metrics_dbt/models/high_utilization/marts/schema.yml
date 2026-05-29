@@ -12,19 +12,13 @@ models:
         tests: [not_null]
       - name: vendor
         tests: [not_null]
-      - name: site_no
-        tests: [not_null]
       - name: site_name
-        tests: [not_null]
-      - name: bts_name
         tests: [not_null]
       - name: cell_name
         tests: [not_null]
       - name: municipality
         tests: [not_null]
       - name: province
-        tests: [not_null]
-      - name: area
         tests: [not_null]
       - name: band
         tests: [not_null]
