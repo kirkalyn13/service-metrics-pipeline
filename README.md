@@ -13,10 +13,10 @@ A locally hosted end-to-end data pipeline designed for team use in analysing net
 
 ## Data Flow
 
-### Batch (Open Signal)
+### Batch (Open Signal, High Utilization)
 ```mermaid
 flowchart LR
-    A[📄 XLSX] --> B[⚙️ ELT\nPandas]
+    A[📄 XLSX, CSV] --> B[⚙️ ELT\nPandas]
     B --> C[(PostgreSQL\nraw)]
     C --> D[dbt\nStaging]
     D --> E[(PostgreSQL\nstg)]
