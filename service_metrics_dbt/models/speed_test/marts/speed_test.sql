@@ -1,5 +1,5 @@
 SELECT
-    DATE_TRUNC('hour', timestamp)   AS timestamp,
+    DATE_TRUNC('hour', timestamp::TIMESTAMPTZ) AS timestamp,
     ip,
     isp,
     location,
