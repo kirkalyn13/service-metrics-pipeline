@@ -30,7 +30,7 @@ flowchart LR
 flowchart LR
     A[Device] --> B[Spring Boot\nProducer]
     B --> C[Kafka\nTopic]
-    C --> D[Consumer]
+    C --> D[Spring Boot\nConsumer]
     D --> E[(PostgreSQL\nraw)]
     E --> F[dbt\nStaging]
     F --> G[(PostgreSQL\nstg)]
