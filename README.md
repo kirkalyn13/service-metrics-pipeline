@@ -28,7 +28,7 @@ flowchart LR
 ### Streaming (Speed Test)
 ```mermaid
 flowchart LR
-    A[Device] --> B[FastAPI\nProducer]
+    A[Device] --> B[Spring Boot\nTopic]
     B --> C[Kafka\nTopic]
     C --> D[Consumer]
     D --> E[(PostgreSQL\nraw)]
