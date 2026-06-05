@@ -114,6 +114,10 @@ docker compose down
 docker exec -it service-metrics-pipeline-metrics_postgres-1 psql -U postgres
 ```
 
+## Related Projects
+
+- [service-metrics-service](https://github.com/kirkalyn13/service-metrics-service) — Standalone Spring Boot microservice that decouples the Kafka producer/consumer layer from this pipeline. Exposes a REST API for publishing service metrics to Kafka and persisting them to PostgreSQL.
+
 ## Authors
 
 - [Engr. Kirk Alyn Santos](https://github.com/kirkalyn13)
