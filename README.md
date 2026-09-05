@@ -116,6 +116,44 @@ docker compose down
 docker exec -it service-metrics-pipeline-metrics_postgres-1 psql -U postgres
 ```
 
+## Hypothetical AWS Architecture
+
+This project runs entirely locally via Docker Compose. The diagram below shows how it would map to AWS if deployed for an internal/private org setup.
+
+```mermaid
+flowchart TB
+    subgraph Ingestion
+        S3RAW[(Amazon S3<br/>Raw XLSX/CSV)]
+        FASTAPI[FastAPI Kafka Producer<br/>Fargate]
+        MSK[Amazon MSK<br/>Kafka Cluster]
+        CONSUMER[Python Kafka Consumer<br/>Fargate]
+    end
+
+    subgraph Orchestration
+        MWAA[Amazon MWAA<br/>Airflow]
+    end
+
+    subgraph ELT
+        GLUE[AWS Glue<br/>Extract & Load]
+        DBT[dbt<br/>Fargate Task]
+    end
+
+    subgraph Storage
+        RDS[(Amazon RDS<br/>PostgreSQL)]
+    end
+
+    subgraph Serving
+        DASH[Streamlit Dashboard<br/>ECS/Fargate]
+        ALB[Application Load Balancer]
+    end
+
+    S3RAW --> GLUE
+    FASTAPI --> MSK --> CONSUMER --> RDS
+    MWAA --> GLUE --> RDS
+    MWAA --> DBT --> RDS
+    RDS --> DASH --> ALB
+```
+
 ## Related Projects
 
 - [service-metrics-service](https://github.com/kirkalyn13/service-metrics-service) — Standalone Spring Boot microservice that decouples the Kafka producer/consumer layer from this pipeline. Exposes a REST API for publishing service metrics to Kafka and persisting them to PostgreSQL.
