@@ -2,6 +2,8 @@
 
 A locally hosted end-to-end data pipeline designed for team use in analysing network service metrics. The pipeline ingests raw network performance data, transforms it through a series of stages, and presents it via an interactive dashboard accessible to the entire team on a local network.
 
+The solution is intentionally designed for on-premises or internal-network deployment, where network metrics are intended to remain within the organization’s environment rather than being exposed through a public-facing application.
+
 ![Airflow](./assets/airflow.png)
 
 ## Stack
