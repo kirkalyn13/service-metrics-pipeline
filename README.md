@@ -158,6 +158,8 @@ flowchart TB
 
 - [service-metrics-service](https://github.com/kirkalyn13/service-metrics-service) — Standalone Spring Boot microservice that decouples the Kafka producer/consumer layer from this pipeline. Exposes a REST API for publishing service metrics to Kafka and persisting them to PostgreSQL.
 
-## Authors
+## Author
 
 - [Engr. Kirk Alyn Santos](https://github.com/kirkalyn13)
+
+© 2026 Kirk Alyn Santos. All rights reserved.
