@@ -161,7 +161,3 @@ flowchart TB
 ## Authors
 
 - [Engr. Kirk Alyn Santos](https://github.com/kirkalyn13)
-
-## License
-
-MIT
