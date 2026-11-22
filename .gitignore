@@ -66,8 +66,9 @@ postgres-data/
 # =========================
 
 # Raw datasets
-data/raw/*
-!data/raw/.gitkeep
+/data/**/*.xlsx
+/data/**/*.csv
+!data/**/*.gitkeep
 
 # Processed datasets
 data/processed/*
