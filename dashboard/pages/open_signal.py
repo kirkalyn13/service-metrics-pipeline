@@ -29,12 +29,17 @@ def load_data() -> pd.DataFrame:
 
 
 # Layout
-st.title("📶 Open Signal — Network Performance")
-st.caption("4G · All networks compared")
 st.set_page_config(
     page_title="Open Signal",
     page_icon="📶",
     layout="wide",
+)
+
+st.title("📶 Open Signal — Network Performance")
+st.caption(
+    "4G · Two networks compared across selected provinces and regions · "
+    "**Weekly download speed and latency** · **Real-world data from several years ago, "
+    "with locations redacted**"
 )
 
 try:

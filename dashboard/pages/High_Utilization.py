@@ -26,8 +26,12 @@ def load_data() -> pd.DataFrame:
     return pd.read_sql(query, engine)
 
 
-st.title("📡 High Utilization — NL Area")
-st.caption("Sites with at least one cell exceeding 90% PRB utilization · All cells shown per site")
+st.title("📡 High Utilization")
+st.caption(
+    "**Congestion view**: sites with **at least one cell above 90% PRB (Physical Resource Block) "
+    "utilization**. All cells are shown for each flagged site, so you can tell isolated "
+    "cell congestion from site-wide congestion. **Site names and locations are redacted**."
+)
 
 try:
     df = load_data()

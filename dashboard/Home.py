@@ -9,8 +9,12 @@ st.set_page_config(
 
 st.title("📈 Service Metrics Dashboard")
 st.markdown("""
-Welcome to the **Service Metrics Dashboard** — a local analytics tool for monitoring 
+Welcome to the **Service Metrics Dashboard**, an analytics tool for monitoring
 and comparing network performance.
+
+**About the data:** This project uses **real-world network data** pulled from several
+years ago. **Sensitive details**, including actual locations and site names, have been
+**redacted** and replaced with anonymized values.
 
 Use the sidebar to navigate between dashboards.
 """)
