@@ -7,8 +7,11 @@ PG_DB       = os.getenv("PG_DB", "service_metrics_db")
 PG_USER     = os.getenv("PG_USER", "postgres")
 PG_PASSWORD = os.getenv("PG_PASSWORD", "postgres")
 PG_SCHEMA   = os.getenv("PG_SCHEMA", "public")
+PG_SSLMODE  = os.getenv("PG_SSLMODE", "prefer")
 
 def get_engine():
     return create_engine(
-        f"postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}"
+        f"postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}",
+        connect_args={"sslmode": PG_SSLMODE},
+        pool_pre_ping=True,
     )
