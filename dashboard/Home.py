@@ -61,9 +61,9 @@ def home():
 
 pg = st.navigation([
     st.Page(home, title="Home", icon="🏠", default=True),
-    st.Page("pages/High_Utilization.py", title="High Utilization", icon="📡"),
-    st.Page("pages/Open_Signal.py", title="Open Signal", icon="📶"),
-    st.Page("pages/Speed_Test.py", title="Speed Test", icon="🏍️")
+    st.Page("pages/high_utilization.py", title="High Utilization", icon="📡"),
+    st.Page("pages/open_signal.py", title="Open Signal", icon="📶"),
+    st.Page("pages/speed_test.py", title="Speed Test", icon="🏍️")
 ])
 
 pg.run()
