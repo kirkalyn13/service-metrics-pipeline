@@ -1,5 +1,7 @@
 # Service Metrics Pipeline
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://service-metrics-report.streamlit.app/)
+
 A locally hosted end-to-end data pipeline designed for team use in analysing network service metrics. The pipeline ingests raw network performance data, transforms it through a series of stages, and presents it via an interactive dashboard accessible to the entire team on a local network.
 
 The solution is intentionally designed for on-premises or internal-network deployment, where network metrics are intended to remain within the organization’s environment rather than being exposed through a public-facing application.
@@ -46,6 +48,14 @@ flowchart LR
 Accessible via browser on the local network at `http://localhost:8501`.
 
 Built with Streamlit and Plotly, the dashboard reads from the mart layer.
+
+### Live Demo
+
+A hosted version of the dashboard is available on Streamlit Community Cloud:
+
+🔗 **[service-metrics-report.streamlit.app](https://service-metrics-report.streamlit.app/)**
+
+The demo uses real-world data from several years ago with sensitive details (locations, site names) redacted, plus simulated Speed Test records. The pipeline itself remains designed for internal-network deployment.
 
 ### Available Dashboards
 
