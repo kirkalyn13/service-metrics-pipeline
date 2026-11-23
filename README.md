@@ -59,13 +59,13 @@ The demo uses real-world data from several years ago with sensitive details (loc
 
 ### Available Dashboards
 
-- Open Signal
-
-![Dashboard](./assets/open_signal_dashboard.png)
-
 - High Utilization
 
 ![Dashboard](./assets/high_utilization_dashboard.png)
+
+- Open Signal
+
+![Dashboard](./assets/open_signal_dashboard.png)
 
 - Speed Test
 
