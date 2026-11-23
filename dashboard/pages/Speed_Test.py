@@ -27,12 +27,25 @@ def load_data() -> pd.DataFrame:
 
 
 # Layout
-st.title("🏍️ Speed Test — Network Performance")
-st.caption("Ookla Speed Test Recording")
 st.set_page_config(
     page_title="Speed Test",
     page_icon="🏍️",
     layout="wide",
+)
+
+st.title("🏍️ Speed Test — Network Performance")
+st.caption(
+    "**Ookla Speed Test** results recording **download speed (Mbps)** and "
+    "**latency (ms)**, with **location filters**."
+)
+st.caption(
+    "Recorded with the [Speedtest Recorder CLI](https://github.com/kirkalyn13/speedtest-recorder) "
+    "and ingested through the [Kafka service](https://github.com/kirkalyn13/service-metrics-service) "
+    "into the main [pipeline](https://github.com/kirkalyn13/service-metrics-pipeline)."
+)
+st.caption(
+    "**Note:** values are **anonymized and simulated**, representing rough figures "
+    "from a run of the tools above."
 )
 
 try:
@@ -49,7 +62,7 @@ if df.empty:
 selected_label = st.selectbox("Metric", list(METRICS.keys()))
 selected_col   = METRICS[selected_label]
 
-# Province filter
+# Location filter
 all_locations = sorted(df["location"].unique())
 st.markdown("""
     <style>
@@ -59,7 +72,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 selected_locations = st.multiselect(
-    "Province",
+    "Location",
     options=all_locations,
     default=all_locations,
 )
@@ -82,13 +95,13 @@ fig = px.line(
         selected_col:      selected_label,
         "isp":    "Network",
     },
-    title=f"{selected_label} — Operator Comparison by Province (Last 13 Weeks)",
+    title=f"{selected_label} — Compare by Location",
     color_discrete_sequence=px.colors.qualitative.Set2,
 )
 
 fig.update_layout(
     title=dict(
-        text=f"<b>{selected_label}</b> — Operator Comparison by Province (Last 13 Weeks)",
+        text=f"<b>{selected_label}</b> — Compare by Location",
         pad=dict(b=30),  # margin below title
     ),
     legend=dict(

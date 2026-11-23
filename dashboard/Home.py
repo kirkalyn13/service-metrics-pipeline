@@ -30,17 +30,31 @@ with col2:
 
 st.divider()
 
+st.subheader("🔍 About the Pipeline")
+st.markdown("""
+A **locally hosted, end-to-end data pipeline** built for team use in analysing
+network service metrics. It ingests **raw network performance data**, transforms it
+through a series of stages, and presents it through an **interactive dashboard**
+accessible to the whole team over the local network.
+
+It is intentionally designed for **on-premises or internal-network deployment**, so
+network metrics stay within the organization's environment rather than being exposed
+through a public-facing application.
+
+📂 **See the pipeline details:** [service-metrics-pipeline on GitHub](https://github.com/kirkalyn13/service-metrics-pipeline)
+""")
+
 st.subheader("📋 Available Dashboards")
 st.markdown("""
+**📡 High Utilization**  
+Weekly summary report for sites with high PRB utilization.
+""")
+st.markdown("""
 **📶 Open Signal**  
-Time series analysis of download speed and latency per province, 
+Time series analysis of download speed and latency per province,
 comparing network operators S and G over the last quarter.
 """)
 st.markdown("""
 **🏍️ Speed Test**  
 Time series analysis of Ookla download speed and latency per reported location.
-""")
-st.markdown("""
-**📡 High Utilization**  
-Weekly Summary report for sites with High PRB Utilization.
 """)

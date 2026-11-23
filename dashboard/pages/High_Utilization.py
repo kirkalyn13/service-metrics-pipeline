@@ -30,7 +30,10 @@ st.title("📡 High Utilization")
 st.caption(
     "**Congestion view**: sites with **at least one cell above 90% PRB (Physical Resource Block) "
     "utilization**. All cells are shown for each flagged site, so you can tell isolated "
-    "cell congestion from site-wide congestion. **Site names and locations are redacted**."
+    "cell congestion from site-wide congestion."
+)
+st.caption(
+    "**Note**: **Site names and locations are redacted**."
 )
 
 try:

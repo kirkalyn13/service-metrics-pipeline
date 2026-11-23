@@ -37,9 +37,11 @@ st.set_page_config(
 
 st.title("📶 Open Signal — Network Performance")
 st.caption(
-    "4G · Two networks compared across selected provinces and regions · "
-    "**Weekly download speed and latency** · **Real-world data from several years ago, "
-    "with locations redacted**"
+    "4G · Two operators compared across selected provinces and regions · "
+    "**Weekly download speed and latency**"
+)
+st.caption(
+    "**Note**: **Real-world data from several years ago, with locations redacted**"
 )
 
 try:
