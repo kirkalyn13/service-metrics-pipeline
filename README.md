@@ -167,6 +167,7 @@ flowchart TB
 ## Related Projects
 
 - [service-metrics-service](https://github.com/kirkalyn13/service-metrics-service) — Standalone Spring Boot microservice that decouples the Kafka producer/consumer layer from this pipeline. Exposes a REST API for publishing service metrics to Kafka and persisting them to PostgreSQL.
+- [speedtest-recorder](https://github.com/kirkalyn13/speedtest-recorder) — Playwright-based Speedtest recorder that triggers an Ookla speed test for a configured iteration count, records the results, and writes them to a CSV file. Data can also be published to the Kafka service of `service-metrics-pipeline`, if enabled.
 
 ## Author
 
